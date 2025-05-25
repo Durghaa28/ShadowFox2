@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout - Myntra Clone</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+    }
+
+    .form-container,
+    .checkout-box {
+      max-width: 500px;
+      background: #fff;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #333;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      color: #555;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #ff3e6c;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e6335d;
+    }
+
+    .checkout-box {
+      display: none;
+      text-align: center;
+    }
+
+    .checkout-box p {
+      font-size: 1rem;
+      color: #666;
+      margin: 1rem 0;
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #ff3e6c;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .back-btn:hover {
+      background-color: #e6335d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Address and Payment Form -->
+  <div class="form-container" id="checkoutForm">
+    <h2>Enter Shipping Details</h2>
+    <form id="orderForm">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required />
+
+      <label for="address">Address</label>
+      <input type="text" id="address" required />
+
+      <label for="city">City</label>
+      <input type="text" id="city" required />
+
+      <label for="pincode">Pincode</label>
+      <input type="text" id="pincode" required />
+
+      <label for="payment">Payment Method</label>
+      <select id="payment" required>
+        <option value="cod">Cash on Delivery</option>
+        <option value="razorpay">Razorpay (Simulated)</option>
+      </select>
+
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <!-- Order Confirmation Message -->
+  <div class="checkout-box" id="confirmationBox">
+    <h2>Order Confirmed ✅</h2>
+    <p>Thank you for shopping with us!</p>
+    <p>Your order will be shipped soon 🚚</p>
+    <a href="product.html" class="back-btn">← Continue Shopping</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('orderForm');
+    const checkoutForm = document.getElementById('checkoutForm');
+    const confirmationBox = document.getElementById('confirmationBox');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const fullname = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const pincode = document.getElementById('pincode').value.trim();
+
+      if (!fullname || !email || !phone || !address || !city || !pincode) {
+        alert("Please fill in all fields");
+        return;
+      }
+
+      // Simulate payment delay
+      alert("Placing your order...");
+
+      setTimeout(() => {
+        localStorage.removeItem('cart'); // Clear cart
+        checkoutForm.style.display = 'none';
+        confirmationBox.style.display = 'block';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

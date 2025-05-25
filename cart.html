@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Cart - Myntra Clone</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f8f8f8;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .cart-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-decoration: none;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding: 1rem 0;
+    }
+    .cart-total {
+      text-align: right;
+      font-weight: bold;
+      margin-top: 1.5rem;
+    }
+    .checkout-btn {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 0.75rem 2rem;
+      background-color: #ff3e6c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 5px;
+    }
+    .checkout-btn:hover {
+      background-color: #e6335d;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Cart</h1>
+  <div class="cart-container">
+    <div id="cartItems"></div>
+    <p class="cart-total" id="cartTotal">Total: ₹0</p>
+    <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderCart() {
+      const cartItemsDiv = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      cartItemsDiv.innerHTML = '';
+      let total = 0;
+
+      if(cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p>Your cart is empty!</p>';
+        cartTotal.textContent = 'Total: ₹0';
+        return;
+      }
+
+      cart.forEach(item => {
+        total += item.price;
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `
+          <span>${item.name}</span>
+          <span>₹${item.price}</span>
+        `;
+        cartItemsDiv.appendChild(itemDiv);
+      });
+
+      cartTotal.textContent = `Total: ₹${total}`;
+    }
+
+    function goToCheckout() {
+      // For now, just alert. Later you can link to a checkout page.
+      alert('Proceeding to checkout... (Not implemented)');
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

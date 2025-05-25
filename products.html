@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Myntra Clone - Products</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* --- Add This or Put in styles.css --- */
+
+    .toolbar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 1rem;
+      background: #f6f6f6;
+      border-bottom: 1px solid #ccc;
+      position: sticky;
+      top: 70px;
+      z-index: 1000; /* high enough */
+    }
+
+    .toolbar button {
+      padding: 8px 16px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .dropup {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropup-content {
+      display: none;
+      position: absolute;
+      top: 100%;      /* position BELOW the button */
+      left: 0;        /* align left edges */
+      background-color: white;
+      border: 1px solid #ccc;
+      min-width: 200px;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1001;  /* higher than toolbar */
+    }
+
+    .dropup.show .dropup-content {
+      display: block;
+    }
+
+    .products-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .product-card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      text-align: center;
+      width: 200px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card img {
+      width: 100%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+
+    .icon-btn {
+      cursor: pointer;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="logo"><a href="index.html" style="color:#ff3f6c;text-decoration:none;">MYNTRA</a></div>
+      <div class="search-bar">
+        <input type="text" id="searchInputProducts" placeholder="Search products..." />
+        <button id="searchBtnProducts">🔍</button>
+      </div>
+      <div class="icons">
+        <a href="cart.html" class="icon-btn">🛒</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter Toolbar -->
+  <div class="toolbar">
+    <div class="dropup" id="categoryDrop">
+      <button onclick="toggleDropup('categoryDrop')">Category</button>
+      <div class="dropup-content">
+        <label><input type="checkbox" value="men" class="filter-category" /> Men</label><br />
+        <label><input type="checkbox" value="women" class="filter-category" /> Women</label><br />
+        <label><input type="checkbox" value="kids" class="filter-category" /> Kids</label><br />
+        <label><input type="checkbox" value="home-living" class="filter-category" /> Home & Living</label><br />
+        <label><input type="checkbox" value="beauty" class="filter-category" /> Beauty</label><br />
+        <button onclick="applyFilters()">OK</button>
+      </div>
+    </div>
+
+    <div class="dropup" id="priceDrop">
+      <button onclick="toggleDropup('priceDrop')">Price</button>
+      <div class="dropup-content">
+        <label><input type="radio" name="price" value="0-499" /> ₹0 - ₹499</label><br />
+        <label><input type="radio" name="price" value="500-999" /> ₹500 - ₹999</label><br />
+        <label><input type="radio" name="price" value="1000-1499" /> ₹1000 - ₹1499</label><br />
+        <label><input type="radio" name="price" value="1500-9999" /> ₹1500+</label><br />
+        <button onclick="applyFilters()">OK</button>
+      </div>
+    </div>
+
+    <div class="dropup" id="sortDrop">
+      <button onclick="toggleDropup('sortDrop')">Sort By</button>
+      <div class="dropup-content">
+        <select id="sortOptions" onchange="applyFilters()">
+          <option value="default">Default</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name: A to Z</option>
+          <option value="name-desc">Name: Z to A</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Product Section -->
+  <main>
+    <section class="products-list"></section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <p>© 2025 Myntra Clone - Built by Durghaa Devi</p>
+      <p>Internship Project</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedCategory = urlParams.get('category') || 'all';
+
+    const products = [
+      { id: 1, name: "Men's Casual Wear", category: "men", price: 500, img: 'men.png' },
+      { id: 2, name: "Shirt with floral print", category: "men", price: 1299, img: 'shirt1.jpg' },
+      { id: 3, name: "Men's Yellow Printed Cotton T-shirt", category: "men", price: 699, img: 'm2.jpg' },
+      { id: 4, name: "Men's Thor Printed T-shirt", category: "men", price: 1099, img: 'm3.jpg' },
+      { id: 5, name: "Men's Fashionable Cotton T-shirt", category: "men", price: 800, img: 'm4.jpg' },
+      { id: 6, name: "Men Casual Denim Shirt", category: "men", price: 1499, img: 'm5.jpg' },
+      { id: 7, name: "Green Denim Jacket", category: "men", price: 1499, img: 'm1.jpg' },
+      { id: 8, name: "Women's Gorgeous Anarkali suit", category: "women", price: 1599, img: 'women1.jpg' },
+      { id: 9, name: "Women Embroided Pure Cotton Kurti", category: "women", price: 1399, img: 'women2.jpg' },
+      { id: 10, name: "Women Elegant Party Wear", category: "women", price: 1299, img: 'women3.jpg' },
+      { id: 11, name: "Women Red Printed Midi Dress", category: "women", price: 1699, img: 'women.jpg' },
+      { id: 12, name: "Women Blue Floral Printed Frock", category: "women", price: 1099, img: 'women4.jpg' },
+      { id: 13, name: "Women Casual and Party Wear", category: "women", price: 1399, img: 'w5.jpg' },
+      { id: 14, name: "Women Gorgeous Black Saree", category: "women", price: 1299, img: 'w6.jpeg' },
+      { id: 15, name: "Women Gorgeous Festival Wear", category: "women", price: 2999, img: 'w7.jpg' },
+      { id: 16, name: "Women Cotton Black Saree", category: "women", price: 2599, img: 'w8.jpg' },
+      { id: 17, name: "Women Gorgeoud Red Frock", category: "women", price: 1599, img: 'w9.jpg' },
+      { id: 18, name: "Women Elegant Pink Floral Top", category: "women", price: 1099, img: '120.jpg' },
+      { id: 19, name: "Intensive Cleanse Complete Set", category: "beauty", price: 3999, img: 'b3.png' },
+      { id: 20, name: "COSRX Snail Mucin Face Gel", category: "beauty", price: 4599, img: 'b1.jpg' },
+      { id: 21, name: "Maybelline Newyork Hyper Curl", category: "beauty", price: 600, img: 'b2.jpg' },
+      { id: 22, name: "MAC Cosmetic Foundation ", category: "beauty", price: 2599, img: 'b4.webp' },
+      { id: 23, name: "Cotton Knit Floral Printed Frock", category: "kids", price: 499, img: "k1.jpg" },
+      { id: 24, name: "Sleeveless Floral Printed Dress ", category: "kids", price: 999, img: 'k2.jpg' },
+      { id: 25, name: "Sleeveless Abstract Printed Dress", category: "kids", price: 799, img: 'k3.jpg' },
+      { id: 26, name: "Full Sleeves Winter Frock With Frill", category: "kids", price: 1499, img: 'k4.jpg' },
+      { id: 27, name: "Hampton Chesterfield L-Shape Corner Sofa, Antique Chestnut Premium Faux Leather", category: "home-living", price: 35000, img: 'h1.jpg' },
+      { id: 28, name: "Edinburgh Coffee Table with 4 Cubical Stools – Natural Finish", category: "home-living", price: 14999, img: 'h2.jpg' },
+      { id: 29, name: "Wooden Lamp - Natural Finish", category: "home-living", price: 9999, img: 'h3.jpg' },
+      { id: 30, name: "Mainstays Blackout Curtain Panels, Set of 2, Teal Blue", category: "home-living", price: 999, img: 'h4.webp' },
+
+    ];
+
+    const productList = document.querySelector('.products-list');
+
+    function renderProducts(list) {
+      productList.innerHTML = '';
+      list.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${product.img}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>₹${product.price}</p>
+          <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>
+        `;
+        productList.appendChild(card);
+      });
+
+      // Add event listeners for all add to cart buttons
+      document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const id = +e.target.dataset.id;
+          addToCart(id);
+        });
+      });
+    }
+
+    function toggleDropup(id) {
+      document.querySelectorAll('.dropup').forEach(drop => {
+        if (drop.id === id) {
+          drop.classList.toggle('show');
+        } else {
+          drop.classList.remove('show');
+        }
+      });
+    }
+
+    function applyFilters() {
+      // Get selected categories
+      const checkedCategories = [...document.querySelectorAll('.filter-category:checked')].map(cb => cb.value);
+      
+      // Get selected price
+      const selectedPrice = document.querySelector('input[name="price"]:checked')?.value;
+
+      // Get sort option
+      const sortOption = document.getElementById('sortOptions').value;
+
+      let filtered = products;
+
+      // Filter category
+      if (checkedCategories.length > 0) {
+        filtered = filtered.filter(p => checkedCategories.includes(p.category));
+      }
+
+      // Filter price
+      if (selectedPrice) {
+        const [min, max] = selectedPrice.split('-').map(Number);
+        filtered = filtered.filter(p => {
+          if (max) return p.price >= min && p.price <= max;
+          return p.price >= min;
+        });
+      }
+
+      // Sort
+      if (sortOption === 'price-asc') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sortOption === 'price-desc') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (sortOption === 'name-asc') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortOption === 'name-desc') {
+        filtered.sort((a, b) => b.name.localeCompare(a.name));
+      }
+
+      renderProducts(filtered);
+    }
+
+    // Your fixed addToCart function - syncs with localStorage cart!
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      // Load cart from localStorage or init empty
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      // Check if product already in cart
+      const existingProduct = cart.find(item => item.id === productId);
+
+      if (existingProduct) {
+        // Increase quantity
+        existingProduct.quantity = (existingProduct.quantity || 1) + 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+
+      // Save updated cart
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      alert(`${product.name} added to cart!`);
+      console.log('Cart:', cart);
+    }
+
+    // Render all products initially
+    renderProducts(products);
+
+    // Close dropups if clicked outside
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropup > button')) {
+        document.querySelectorAll('.dropup').forEach(drop => drop.classList.remove('show'));
+      }
+    };
+  </script>
+
+</body>
+</html>

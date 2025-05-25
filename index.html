@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Myntra Clone - Home</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="logo">MYNTRA</div>
+      <nav>
+        <ul class="nav-links">
+          <li class="dropdown">
+            <a href="#">Men ▾</a>
+            <ul class="dropdown-menu">
+              <li><a href="products.html?category=men-shirts">Shirts</a></li>
+              <li><a href="products.html?category=men-jeans">Jeans</a></li>
+              <li><a href="products.html?category=men-shoes">Shoes</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#">Women ▾</a>
+            <ul class="dropdown-menu">
+              <li><a href="products.html?category=women-dresses">Dresses</a></li>
+              <li><a href="products.html?category=women-tops">Tops</a></li>
+              <li><a href="products.html?category=women-shoes">Shoes</a></li>
+            </ul>
+          </li>
+          <li><a href="products.html?category=kids">Kids</a></li>
+          <li><a href="products.html?category=home-living">Home & Living</a></li>
+          <li><a href="products.html?category=beauty">Beauty</a></li>
+        </ul>
+      </nav>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search for products, brands and more" />
+        <button id="searchBtn">🔍</button>
+      </div>
+      <div class="icons">
+        
+        <a href="cart.html" class="icon-btn">🛒</a>
+        <a href="login.html" class="icon-btn">👤</a>
+
+        
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Carousel -->
+  <section class="hero-carousel">
+    <div class="carousel-slide active" style="background-image: url('banner3.jpg')"></div>
+    <div class="carousel-slide" style="background-image: url('banner2.webp')"></div>
+    <div class="carousel-slide" style="background-image: url('banner1.jpg')"></div>
+    <button class="carousel-btn prev">&#10094;</button>
+    <button class="carousel-btn next">&#10095;</button>
+  </section>
+
+  <!-- Categories -->
+  <section class="categories container">
+    <h2>Shop by Category</h2>
+    <div class="category-grid">
+      <a href="products.html?category=men" class="cat-card">
+        <img src="men.png" alt="Men" />
+        <p>Men</p>
+      </a>
+      <a href="products.html?category=women" class="cat-card">
+        <img src="women.jpg" alt="Women" />
+        <p>Women</p>
+      </a>
+      <a href="products.html?category=kids" class="cat-card">
+        <img src="kids.jpeg" alt="Kids" />
+        <p>Kids</p>
+      </a>
+      <a href="products.html?category=home-living" class="cat-card">
+        <img src="home.jpg" alt="Home & Living" />
+        <p>Home & Living</p>
+      </a>
+      <a href="products.html?category=beauty" class="cat-card">
+        <img src="beauty.webp" alt="Beauty" />
+        <p>Beauty</p>
+      </a>
+    </div>
+  </section>
+
+  <div class="main-content">
+  <!-- Sidebar: Filters and Sort -->
+  <aside class="sidebar">
+    <!-- Your filter and sort options here -->
+  </aside>
+
+  <!-- Product Grid -->
+  <section class="product-grid">
+    <!-- Your product cards go here -->
+  </section>
+</div>
+
+  
+
+  <!-- Featured Products -->
+  <section class="featured container">
+    <h2>Featured Products</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="shirt1.jpg" alt="Men's Casual Shirt" />
+        <h3>Men's Casual Shirt</h3>
+        <p class="price">₹799</p>
+        <button class="btn-add-cart">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="dress1.jpg" alt="Floral Women's Dress" />
+        <h3>Floral Women's Dress</h3>
+        <p class="price">₹1299</p>
+        <button class="btn-add-cart">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="shoes1.jpg" alt="Sports Shoes" />
+        <h3>Sports Shoes</h3>
+        <p class="price">₹1499</p>
+        <button class="btn-add-cart">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="watch1.jpg" alt="Stylish Wrist Watch" />
+        <h3>Stylish Wrist Watch</h3>
+        <p class="price">₹1999</p>
+        <button class="btn-add-cart">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <p>© 2025 Myntra Clone - Built by Durghaa Devi</p>
+      <p>Internship Project</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // script.js
+
+// Wait till DOM is loaded to avoid issues
+document.addEventListener('DOMContentLoaded', () => {
+  // Grab all Add to Cart buttons
+  const addToCartButtons = document.querySelectorAll('.btn-add-cart');
+
+  addToCartButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      // Get the product card div
+      const productCard = e.target.closest('.product-card');
+
+      // Extract product details
+      const productName = productCard.querySelector('h3').innerText;
+      const productPriceText = productCard.querySelector('.price').innerText;
+      const productPrice = parseInt(productPriceText.replace('₹', ''));
+      const productImgSrc = productCard.querySelector('img').src;
+
+      // Create product object
+      const product = {
+        name: productName,
+        price: productPrice,
+        image: productImgSrc,
+        quantity: 1
+      };
+
+      // Fetch existing cart or start new
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      // Check if product already in cart
+      const existingProductIndex = cart.findIndex(item => item.name === product.name);
+
+      if (existingProductIndex !== -1) {
+        // If exists, increase quantity
+        cart[existingProductIndex].quantity += 1;
+      } else {
+        // Else add new product
+        cart.push(product);
+      }
+
+      // Save back to localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      alert(`${product.name} added to cart!`);
+      console.log('Current Cart:', cart);
+    });
+  });
+});
+
+  </script>
+</body>
+</html>
